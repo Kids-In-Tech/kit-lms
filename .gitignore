@@ -25,3 +25,7 @@ dist/
 
 # Test artifacts
 .pytest_cache/
+-e 
+# Environment files
+*.env
+*.env.*
