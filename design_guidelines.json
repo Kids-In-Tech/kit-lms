@@ -1,0 +1,209 @@
+{
+  "design_system": {
+    "identity": {
+      "name": "E1 LMS",
+      "archetype": "Organic & Earthy (Academic)",
+      "tone": "Trustworthy, Professional, Focused, Encouraging",
+      "theme_mode": "light",
+      "principles": [
+        "Clarity over decoration",
+        "Hierarchy through typography, not color",
+        "Content-first layouts",
+        "Micro-interactions for delight"
+      ]
+    },
+    "typography": {
+      "font_family": {
+        "headings": "Manrope, sans-serif",
+        "body": "Public Sans, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "scale": {
+        "h1": "text-4xl md:text-5xl font-bold tracking-tight",
+        "h2": "text-3xl md:text-4xl font-semibold tracking-tight",
+        "h3": "text-2xl font-semibold tracking-tight",
+        "h4": "text-xl font-medium",
+        "body_lg": "text-lg leading-relaxed text-slate-600",
+        "body_base": "text-base leading-relaxed text-slate-600",
+        "caption": "text-sm text-slate-500 uppercase tracking-wider font-medium"
+      },
+      "imports": [
+        "@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Public+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');"
+      ]
+    },
+    "colors": {
+      "palette": {
+        "primary": {
+          "DEFAULT": "#312E81",
+          "foreground": "#FFFFFF",
+          "50": "#EEF2FF",
+          "100": "#E0E7FF",
+          "500": "#6366F1",
+          "900": "#312E81",
+          "description": "Slate Indigo - Academic Authority"
+        },
+        "secondary": {
+          "DEFAULT": "#F59E0B",
+          "foreground": "#FFFFFF",
+          "description": "Vibrant Ochre - Energy & Progress"
+        },
+        "background": {
+          "DEFAULT": "#FAFAF9",
+          "paper": "#FFFFFF",
+          "subtle": "#F5F5F4",
+          "description": "Warm Stone/Paper - Avoid sterile white"
+        },
+        "text": {
+          "DEFAULT": "#1C1917",
+          "muted": "#57534E",
+          "subtle": "#A8A29E"
+        },
+        "accent": {
+          "success": "#10B981",
+          "warning": "#F59E0B",
+          "error": "#EF4444",
+          "info": "#3B82F6"
+        },
+        "border": {
+          "DEFAULT": "#E7E5E4",
+          "strong": "#D6D3D1"
+        }
+      },
+      "gradients": {
+        "hero": "bg-gradient-to-br from-indigo-50 via-stone-50 to-orange-50",
+        "card_hover": "hover:bg-gradient-to-br hover:from-white hover:to-indigo-50/30"
+      }
+    },
+    "spacing": {
+      "container_padding": "p-6 md:p-8 lg:p-12",
+      "section_gap": "gap-8 md:gap-12",
+      "item_gap": "gap-4 md:gap-6"
+    },
+    "borders": {
+      "radius": {
+        "card": "rounded-xl",
+        "button": "rounded-md",
+        "input": "rounded-md"
+      },
+      "style": "border border-border"
+    },
+    "shadows": {
+      "card": "shadow-sm hover:shadow-md transition-shadow duration-300",
+      "floating": "shadow-lg shadow-indigo-900/5"
+    }
+  },
+  "layout_strategies": {
+    "dashboard_admin_instructor": {
+      "name": "The Control Tower (Bento High Density)",
+      "grid": "grid-cols-1 md:grid-cols-4 gap-6",
+      "description": "Dense, data-heavy views. Use white cards with sharp headers.",
+      "rules": [
+        "Sidebar navigation (fixed left)",
+        "Header with breadcrumbs and user profile",
+        "Main content area with max-width-7xl",
+        "Widgets stretch to fill height"
+      ]
+    },
+    "student_portal": {
+      "name": "The Learning Lounge (Tetris Grid)",
+      "grid": "grid-cols-1 md:grid-cols-12 gap-8",
+      "description": "Spacious, inviting, course-focused.",
+      "rules": [
+        "Top navigation (sticky)",
+        "Hero section for 'Continue Learning'",
+        "Course cards use 3:4 aspect ratio or horizontal list",
+        "Progress bars prominent"
+      ]
+    },
+    "course_player": {
+      "name": "The Focus Mode",
+      "structure": "flex h-screen overflow-hidden",
+      "sidebar": "w-80 border-r bg-white overflow-y-auto hidden md:block",
+      "main": "flex-1 overflow-y-auto bg-stone-50 p-8",
+      "description": "Distraction-free learning environment."
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 font-medium transition-transform active:scale-95",
+      "secondary": "bg-secondary text-secondary-foreground hover:bg-secondary/90 h-10 px-4 py-2 font-medium",
+      "ghost": "hover:bg-accent hover:text-accent-foreground"
+    },
+    "cards": {
+      "base": "bg-white border rounded-xl shadow-sm p-6",
+      "interactive": "bg-white border rounded-xl shadow-sm p-6 cursor-pointer hover:border-primary/50 hover:shadow-md transition-all duration-300 group"
+    },
+    "inputs": {
+      "base": "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+    }
+  },
+  "visual_enhancers": {
+    "glassmorphism": "backdrop-blur-xl bg-white/80 border-b border-white/20",
+    "noise_texture": "before:fixed before:inset-0 before:z-[-1] before:bg-[url('/noise.png')] before:opacity-[0.03]",
+    "micro_interactions": {
+      "hover_lift": "hover:-translate-y-1 transition-transform duration-300 ease-out",
+      "button_press": "active:scale-[0.98]"
+    }
+  },
+  "image_urls": {
+    "landing_hero": {
+      "url": "https://images.pexels.com/photos/5212687/pexels-photo-5212687.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Diverse group of students collaborating",
+      "category": "hero"
+    },
+    "instructor_feature": {
+      "url": "https://images.pexels.com/photos/6238174/pexels-photo-6238174.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Teachers/Coworkers collaborating in office",
+      "category": "feature"
+    },
+    "login_background": {
+      "url": "https://images.unsplash.com/photo-1767482712650-8e52fbf8ca0d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHwzfHxtaW5pbWFsaXN0JTIwYWJzdHJhY3QlMjBnZW9tZXRyaWMlMjBzaGFwZXN8ZW58MHx8fHwxNzcwNDIzNTk1fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Abstract colorful geometric pattern",
+      "category": "background"
+    },
+    "student_profile": {
+      "url": "https://images.unsplash.com/photo-1629359652978-a5d383151c4c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODd8MHwxfHNlYXJjaHwzfHxzdHVkZW50JTIwbGVhcm5pbmclMjBsYXB0b3B8ZW58MHx8fHwxNzcwNDIzNTk0fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Student focusing on learning",
+      "category": "profile"
+    },
+    "dashboard_banner": {
+      "url": "https://images.unsplash.com/photo-1770368437389-86bde15fcb33?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxOTB8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwYWJzdHJhY3QlMjBnZW9tZXRyaWMlMjBzaGFwZXN8ZW58MHx8fHwxNzcwNDIzNTk1fDA&ixlib=rb-4.1.0&q=85",
+      "description": "Abstract blue and orange shapes",
+      "category": "banner"
+    }
+  },
+  "libraries": {
+    "charts": "recharts",
+    "icons": "lucide-react",
+    "date": "date-fns",
+    "forms": "react-hook-form + zod",
+    "ui_primitives": "shadcn/ui",
+    "motion": "framer-motion"
+  },
+  "accessibility": {
+    "rules": [
+      "Ensure 4.5:1 contrast ratio for text",
+      "Use semantic HTML (nav, main, aside, section)",
+      "Focus rings must be visible",
+      "All interactive elements need aria-labels if no text"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Install 'lucide-react' and 'recharts' if not present.",
+    "Use 'Manrope' for all Headings (H1-H4) and 'Public Sans' for body text.",
+    "Implement the 'Control Tower' layout for Admin/Instructor dashboards.",
+    "Implement the 'Learning Lounge' layout for Student Portal.",
+    "Use the provided image URLs for specific sections.",
+    "Do not use gradients for backgrounds, use the 'Warm Stone' (#FAFAF9) solid color.",
+    "Add 'data-testid' to all buttons, inputs, and links."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Do not use generic centered layouts. Use grid-based asymmetry.",
+    "Use 24px+ padding inside cards.",
+    "Never use pure black (#000000); use Slate 900 or Stone 900.",
+    "Micro-animations on all hover states (transform, opacity, or border color).",
+    "Use 'sonner' for toast notifications.",
+    "Components must use named exports.",
+    "Pages must use default exports."
+  ]
+}
