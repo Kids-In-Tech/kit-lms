@@ -622,6 +622,12 @@ async def complete_lesson(lesson_id: str, request: Request):
         if progress >= 100:
             update_data["status"] = "completed"
             update_data["completed_at"] = datetime.now(timezone.utc).isoformat()
+            # Notify student of course completion
+            course = db.courses.find_one({"course_id": lesson["course_id"]}, {"_id": 0})
+            send_notification(
+                "Course Completed!", f"Congratulations! You completed '{course['title'] if course else 'the course'}'.",
+                ntype="course_completed", target_users=[user["user_id"]], created_by="system"
+            )
         db.enrollments.update_one({"enrollment_id": enrollment["enrollment_id"]}, {"$set": update_data})
     db.activity_logs.insert_one({
         "log_id": gid("log_"), "user_id": user["user_id"], "action": "lesson_completed",
