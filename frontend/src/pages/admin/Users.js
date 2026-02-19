@@ -15,6 +15,7 @@ const calcAge = (dob) => {
 };
 
 export default function Users({ role: filterRole }) {
+  const { t } = useLanguage();
   const [users, setUsers] = useState([]);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
