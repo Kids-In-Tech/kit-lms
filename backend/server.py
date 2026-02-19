@@ -505,6 +505,17 @@ async def create_module(course_id: str, request: Request):
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     db.modules.insert_one(module)
+    # Recalculate progress for enrolled students & notify
+    recalc_enrollment_progress(course_id)
+    course = db.courses.find_one({"course_id": course_id}, {"_id": 0})
+    course_title = course["title"] if course else "a course"
+    # Notify enrolled students
+    enrolled_students = [e["student_id"] for e in db.enrollments.find({"course_id": course_id}, {"student_id": 1, "_id": 0})]
+    if enrolled_students:
+        send_notification(
+            f"New Module: {module['title']}", f"A new module was added to {course_title}.",
+            ntype="course_update", target_users=enrolled_students, created_by=user["user_id"]
+        )
     return {k: v for k, v in module.items() if k != "_id"}
 
 @app.put("/api/modules/{module_id}")
