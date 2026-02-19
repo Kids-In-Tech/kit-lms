@@ -462,6 +462,11 @@ async def create_course(request: Request):
             "created_at": datetime.now(timezone.utc).isoformat()
         }
         db.cert_templates.insert_one(template)
+    # Notify all users about new course
+    send_notification(
+        f"New Course: {course['title']}", f"A new course '{course['title']}' has been created.",
+        ntype="course_created", target_role="all", created_by=user["user_id"]
+    )
     return {k: v for k, v in course.items() if k != "_id"}
 
 @app.put("/api/courses/{course_id}")
