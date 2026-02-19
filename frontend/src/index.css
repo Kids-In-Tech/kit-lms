@@ -77,6 +77,7 @@ code, pre, .code-block {
 .animate-fade-up { animation: fadeUp 0.4s ease-out forwards; }
 .animate-slide-right { animation: slideInRight 0.4s ease-out forwards; }
 .animate-slide-left { animation: slideInLeft 0.3s ease-out forwards; }
+.animate-fade-in { animation: fadeUp 0.3s ease-out forwards; }
 
 .skeleton {
   background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%);
