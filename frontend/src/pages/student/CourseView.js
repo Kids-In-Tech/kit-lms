@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import API from '../../api';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { ArrowLeft, CheckCircle2, Circle, Play, FileText, ChevronDown, ChevronRight, Clock, Lock, Award, FileQuestion } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function CourseView() {
   const { courseId } = useParams();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [course, setCourse] = useState(null);
   const [enrollment, setEnrollment] = useState(null);
@@ -17,7 +19,7 @@ export default function CourseView() {
   const [certStatus, setCertStatus] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchCourseData = useCallback(() => {
     Promise.all([
       API.get(`/api/courses/${courseId}`),
       API.get('/api/enrollments', { params: { course_id: courseId } }),
