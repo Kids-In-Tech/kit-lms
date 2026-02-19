@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import API from '../../api';
+import { useLanguage } from '../../context/LanguageContext';
 import { Users, BookOpen, GraduationCap, TrendingUp, Clock, Award, ClipboardList, Activity } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
@@ -8,23 +9,30 @@ const COLORS = ['#0D9488', '#14B8A6', '#5EEAD4', '#99F6E4', '#CCFBF1'];
 export default function AdminDashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     API.get('/api/analytics/overview').then(r => setData(r.data)).catch(() => {}).finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, 20000);
+    return () => clearInterval(interval);
+  }, [fetchData]);
 
   if (loading) return <div className="flex items-center justify-center h-64"><div className="animate-spin w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full" /></div>;
   if (!data) return <p className="text-[#57534E]">Failed to load dashboard data.</p>;
 
   const stats = [
-    { label: 'Total Students', value: data.total_students, icon: Users, color: '#0D9488', bg: '#F0FDFA' },
-    { label: 'Total Instructors', value: data.total_instructors, icon: GraduationCap, color: '#8B5CF6', bg: '#F5F3FF' },
-    { label: 'Total Courses', value: data.total_courses, icon: BookOpen, color: '#F97316', bg: '#FFF7ED' },
-    { label: 'Active Enrollments', value: data.active_enrollments, icon: TrendingUp, color: '#3B82F6', bg: '#EFF6FF' },
-    { label: 'Completion Rate', value: `${data.completion_rate}%`, icon: Award, color: '#10B981', bg: '#ECFDF5' },
-    { label: 'Avg Progress', value: `${data.avg_progress}%`, icon: Activity, color: '#0D9488', bg: '#F0FDFA' },
-    { label: 'Pending Reviews', value: data.pending_submissions, icon: ClipboardList, color: '#EF4444', bg: '#FEF2F2' },
-    { label: 'Certificates', value: data.total_certificates, icon: Award, color: '#8B5CF6', bg: '#F5F3FF' },
+    { label: t('dashboard.totalStudents'), value: data.total_students, icon: Users, color: '#0D9488', bg: '#F0FDFA' },
+    { label: t('dashboard.totalInstructors'), value: data.total_instructors, icon: GraduationCap, color: '#8B5CF6', bg: '#F5F3FF' },
+    { label: t('dashboard.totalCourses'), value: data.total_courses, icon: BookOpen, color: '#F97316', bg: '#FFF7ED' },
+    { label: t('dashboard.activeEnrollments'), value: data.active_enrollments, icon: TrendingUp, color: '#3B82F6', bg: '#EFF6FF' },
+    { label: t('dashboard.completionRate'), value: `${data.completion_rate}%`, icon: Award, color: '#10B981', bg: '#ECFDF5' },
+    { label: t('dashboard.avgProgress'), value: `${data.avg_progress}%`, icon: Activity, color: '#0D9488', bg: '#F0FDFA' },
+    { label: t('dashboard.pendingReviews'), value: data.pending_submissions, icon: ClipboardList, color: '#EF4444', bg: '#FEF2F2' },
+    { label: t('dashboard.certificates'), value: data.total_certificates, icon: Award, color: '#8B5CF6', bg: '#F5F3FF' },
   ];
 
   const pieData = [
@@ -35,8 +43,8 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6 animate-fade-in" data-testid="admin-dashboard">
       <div>
-        <h1 className="text-2xl font-bold text-[#1C1917]" style={{ fontFamily: 'Plus Jakarta Sans' }}>Dashboard</h1>
-        <p className="text-sm text-[#57534E] mt-1">Welcome back! Here's your platform overview.</p>
+        <h1 className="text-2xl font-bold text-[#1C1917]" style={{ fontFamily: 'Plus Jakarta Sans' }}>{t('dashboard.title')}</h1>
+        <p className="text-sm text-[#57534E] mt-1">{t('dashboard.welcome')}</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -55,7 +63,7 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2 bg-white rounded-xl border border-[#E7E5E4] p-6">
-          <h3 className="text-lg font-semibold text-[#1C1917] mb-4" style={{ fontFamily: 'Plus Jakarta Sans' }}>Recent Activity</h3>
+          <h3 className="text-lg font-semibold text-[#1C1917] mb-4" style={{ fontFamily: 'Plus Jakarta Sans' }}>{t('dashboard.recentActivity')}</h3>
           <div className="space-y-3">
             {data.recent_activity?.slice(0, 8).map((a, i) => (
               <div key={i} className="flex items-center gap-3 py-2 border-b border-[#F5F5F4] last:border-0">
@@ -73,7 +81,7 @@ export default function AdminDashboard() {
         </div>
 
         <div className="bg-white rounded-xl border border-[#E7E5E4] p-6">
-          <h3 className="text-lg font-semibold text-[#1C1917] mb-4" style={{ fontFamily: 'Plus Jakarta Sans' }}>Enrollment Status</h3>
+          <h3 className="text-lg font-semibold text-[#1C1917] mb-4" style={{ fontFamily: 'Plus Jakarta Sans' }}>{t('dashboard.enrollmentStatus')}</h3>
           {data.total_enrollments > 0 ? (
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
@@ -96,7 +104,7 @@ export default function AdminDashboard() {
       </div>
 
       <div className="bg-white rounded-xl border border-[#E7E5E4] p-6">
-        <h3 className="text-lg font-semibold text-[#1C1917] mb-4" style={{ fontFamily: 'Plus Jakarta Sans' }}>Recent Signups</h3>
+        <h3 className="text-lg font-semibold text-[#1C1917] mb-4" style={{ fontFamily: 'Plus Jakarta Sans' }}>{t('dashboard.recentSignups')}</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
