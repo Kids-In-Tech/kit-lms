@@ -757,6 +757,14 @@ async def create_assignment(request: Request):
         "created_by": user["user_id"], "created_at": datetime.now(timezone.utc).isoformat()
     }
     db.assignments.insert_one(assignment)
+    # Notify enrolled students about new assignment
+    if assignment.get("course_id"):
+        enrolled = [e["student_id"] for e in db.enrollments.find({"course_id": assignment["course_id"]}, {"student_id": 1, "_id": 0})]
+        if enrolled:
+            send_notification(
+                f"New Assignment: {assignment['title']}", f"A new assignment has been added.",
+                ntype="assignment_added", target_users=enrolled, created_by=user["user_id"]
+            )
     return {k: v for k, v in assignment.items() if k != "_id"}
 
 @app.put("/api/assignments/{assignment_id}")
