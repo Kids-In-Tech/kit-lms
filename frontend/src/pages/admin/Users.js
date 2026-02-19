@@ -43,14 +43,14 @@ export default function Users({ role: filterRole }) {
     course_ids: []
   };
 
-  const fetchData = () => {
+  const fetchData = useCallback(() => {
     Promise.all([
       API.get('/api/users', { params: { role: filterRole, search: search || undefined } }),
       API.get('/api/courses')
     ]).then(([u, c]) => { setUsers(u.data); setCourses(c.data); }).catch(() => {}).finally(() => setLoading(false));
-  };
+  }, [search, filterRole]);
 
-  useEffect(() => { fetchData(); }, [search, filterRole]);
+  useEffect(() => { fetchData(); const interval = setInterval(fetchData, 20000); return () => clearInterval(interval); }, [fetchData]);
 
   const openNew = () => { setForm(emptyForm); setEditing(null); setShowForm(true); };
   const openEdit = async (u) => {
