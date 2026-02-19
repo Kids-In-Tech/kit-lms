@@ -605,7 +605,10 @@ async def update_lesson(lesson_id: str, request: Request):
 async def delete_lesson(lesson_id: str, request: Request):
     user = get_user(request)
     require_role(user, ["super_admin", "instructor"])
+    lesson = db.lessons.find_one({"lesson_id": lesson_id}, {"_id": 0})
     db.lessons.delete_one({"lesson_id": lesson_id})
+    if lesson:
+        recalc_enrollment_progress(lesson["course_id"])
     return {"message": "Lesson deleted"}
 
 @app.post("/api/lessons/{lesson_id}/complete")
