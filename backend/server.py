@@ -675,6 +675,14 @@ async def create_quiz(request: Request):
         "created_by": user["user_id"], "created_at": datetime.now(timezone.utc).isoformat()
     }
     db.quizzes.insert_one(quiz)
+    # Notify enrolled students about new quiz
+    if quiz.get("course_id"):
+        enrolled = [e["student_id"] for e in db.enrollments.find({"course_id": quiz["course_id"]}, {"student_id": 1, "_id": 0})]
+        if enrolled:
+            send_notification(
+                f"New Quiz: {quiz['title']}", f"A new quiz has been published.",
+                ntype="quiz_published", target_users=enrolled, created_by=user["user_id"]
+            )
     return {k: v for k, v in quiz.items() if k != "_id"}
 
 @app.put("/api/quizzes/{quiz_id}")
