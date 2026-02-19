@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { Toaster } from 'react-hot-toast';
 import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
@@ -93,6 +94,7 @@ function AppRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
+      <LanguageProvider>
       <AuthProvider>
         <AppRoutes />
         <Toaster
@@ -105,6 +107,7 @@ export default function App() {
           }}
         />
       </AuthProvider>
+      </LanguageProvider>
     </BrowserRouter>
   );
 }
