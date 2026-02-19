@@ -27,11 +27,11 @@ export default function Courses() {
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [editingLesson, setEditingLesson] = useState(null);
 
-  const fetchCourses = () => {
+  const fetchCourses = useCallback(() => {
     API.get('/api/courses', { params: { search: search || undefined } }).then(r => setCourses(r.data)).catch(() => {}).finally(() => setLoading(false));
-  };
+  }, [search]);
 
-  useEffect(() => { fetchCourses(); }, [search]);
+  useEffect(() => { fetchCourses(); const interval = setInterval(fetchCourses, 20000); return () => clearInterval(interval); }, [fetchCourses]);
   useEffect(() => {
     if (user?.role === 'super_admin') {
       API.get('/api/users', { params: { role: 'instructor' } }).then(r => setInstructors(r.data)).catch(() => {});
