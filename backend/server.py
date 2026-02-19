@@ -566,6 +566,16 @@ async def create_lesson(module_id: str, request: Request):
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     db.lessons.insert_one(lesson)
+    # Recalculate progress for enrolled students & notify
+    recalc_enrollment_progress(mod["course_id"])
+    course = db.courses.find_one({"course_id": mod["course_id"]}, {"_id": 0})
+    course_title = course["title"] if course else "a course"
+    enrolled_students = [e["student_id"] for e in db.enrollments.find({"course_id": mod["course_id"]}, {"student_id": 1, "_id": 0})]
+    if enrolled_students:
+        send_notification(
+            f"New Lesson: {lesson['title']}", f"A new lesson was added to {course_title}.",
+            ntype="course_update", target_users=enrolled_students, created_by=user["user_id"]
+        )
     return {k: v for k, v in lesson.items() if k != "_id"}
 
 @app.put("/api/lessons/{lesson_id}")
