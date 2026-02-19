@@ -93,3 +93,10 @@ code, pre, .code-block {
 .prose pre { background: var(--kit-navy); color: #E2E8F0; padding: 1rem; border-radius: 8px; overflow-x: auto; margin-bottom: 1rem; }
 .prose code { font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; }
 .prose strong { color: var(--kit-navy); }
+
+[contenteditable][data-placeholder]:empty:before {
+  content: attr(data-placeholder);
+  color: var(--kit-subtle);
+  pointer-events: none;
+  font-style: italic;
+}
