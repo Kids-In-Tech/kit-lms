@@ -67,6 +67,35 @@ def require_role(user, roles):
     if user.get("role") not in roles:
         raise HTTPException(403, "Insufficient permissions")
 
+def send_notification(title, message, ntype="system", target_role="all", target_users=None, created_by="system"):
+    notif = {
+        "notification_id": gid("notif_"), "title": title, "message": message,
+        "type": ntype, "target_role": target_role, "target_users": target_users or [],
+        "created_by": created_by, "read_by": [],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    db.notifications.insert_one(notif)
+    return {k: v for k, v in notif.items() if k != "_id"}
+
+def recalc_enrollment_progress(course_id):
+    """Recalculate progress for ALL enrollments of a course based on current lesson count."""
+    total_lessons = db.lessons.count_documents({"course_id": course_id})
+    if total_lessons == 0:
+        return
+    enrollments = list(db.enrollments.find({"course_id": course_id}, {"_id": 0}))
+    for e in enrollments:
+        completed = e.get("completed_lessons", [])
+        # Filter out lessons that no longer exist
+        existing = [lid for lid in completed if db.lessons.find_one({"lesson_id": lid})]
+        progress = round(len(existing) / total_lessons * 100, 1)
+        update_data = {"completed_lessons": existing, "progress": progress}
+        if progress < 100 and e.get("status") == "completed":
+            update_data["status"] = "active"
+        elif progress >= 100 and e.get("status") != "completed":
+            update_data["status"] = "completed"
+            update_data["completed_at"] = datetime.now(timezone.utc).isoformat()
+        db.enrollments.update_one({"enrollment_id": e["enrollment_id"]}, {"$set": update_data})
+
 # ============ AUTH ============
 @app.post("/api/auth/register")
 async def register(request: Request):
