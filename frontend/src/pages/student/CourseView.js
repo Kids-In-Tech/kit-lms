@@ -38,7 +38,14 @@ export default function CourseView() {
       const firstUncompleted = allLessons.find(l => !myEnrollment?.completed_lessons?.includes(l.lesson_id));
       setActiveLesson(firstUncompleted || allLessons[0]);
     }).catch(() => toast.error('Error loading course')).finally(() => setLoading(false));
-  }, [courseId]);
+  }, [courseId, user?.user_id, fetchCourseData]);
+
+  // Poll for live updates
+  useEffect(() => {
+    fetchCourseData();
+    const interval = setInterval(fetchCourseData, 20000);
+    return () => clearInterval(interval);
+  }, [fetchCourseData]);
 
   const completeLesson = async (lessonId) => {
     try {
