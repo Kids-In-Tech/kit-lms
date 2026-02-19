@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import API from '../../api';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { Plus, Search, Edit2, Trash2, Eye, X, ChevronRight, GripVertical } from 'lucide-react';
 import ConfirmModal from '../../components/ConfirmModal';
 import RichTextEditor from '../../components/RichTextEditor';
@@ -11,6 +12,7 @@ const LEVELS = ['beginner', 'intermediate', 'advanced'];
 
 export default function Courses() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
