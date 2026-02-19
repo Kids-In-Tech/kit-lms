@@ -1,38 +1,40 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { LayoutDashboard, BookOpen, Users, GraduationCap, FileQuestion, ClipboardList, BarChart3, Award, Bell, Settings, ChevronLeft, ChevronRight, LogOut, Menu, Zap, X, UserCircle, Megaphone } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
+import { LayoutDashboard, BookOpen, Users, GraduationCap, FileQuestion, ClipboardList, BarChart3, Award, Bell, Settings, ChevronLeft, ChevronRight, LogOut, Menu, Zap, X, UserCircle } from 'lucide-react';
 
 const adminLinks = [
-  { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
-  { to: '/admin/courses', icon: BookOpen, label: 'Courses' },
-  { to: '/admin/students', icon: Users, label: 'Students' },
-  { to: '/admin/instructors', icon: GraduationCap, label: 'Instructors' },
-  { to: '/admin/quizzes', icon: FileQuestion, label: 'Quizzes' },
-  { to: '/admin/assignments', icon: ClipboardList, label: 'Assignments' },
-  { to: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
-  { to: '/admin/certificates', icon: Award, label: 'Certificates' },
-  { to: '/admin/notifications', icon: Bell, label: 'Notifications' },
-  { to: '/admin/settings', icon: Settings, label: 'Settings' },
-  { to: '/admin/profile', icon: UserCircle, label: 'Profile' },
+  { to: '/admin', icon: LayoutDashboard, labelKey: 'nav.dashboard', end: true },
+  { to: '/admin/courses', icon: BookOpen, labelKey: 'nav.courses' },
+  { to: '/admin/students', icon: Users, labelKey: 'nav.students' },
+  { to: '/admin/instructors', icon: GraduationCap, labelKey: 'nav.instructors' },
+  { to: '/admin/quizzes', icon: FileQuestion, labelKey: 'nav.quizzes' },
+  { to: '/admin/assignments', icon: ClipboardList, labelKey: 'nav.assignments' },
+  { to: '/admin/analytics', icon: BarChart3, labelKey: 'nav.analytics' },
+  { to: '/admin/certificates', icon: Award, labelKey: 'nav.certificates' },
+  { to: '/admin/notifications', icon: Bell, labelKey: 'nav.notifications' },
+  { to: '/admin/settings', icon: Settings, labelKey: 'nav.settings' },
+  { to: '/admin/profile', icon: UserCircle, labelKey: 'nav.profile' },
 ];
 
 const instructorLinks = [
-  { to: '/instructor', icon: LayoutDashboard, label: 'Dashboard', end: true },
-  { to: '/instructor/courses', icon: BookOpen, label: 'My Courses' },
-  { to: '/instructor/assignments', icon: ClipboardList, label: 'Assignments' },
-  { to: '/instructor/analytics', icon: BarChart3, label: 'Analytics' },
-  { to: '/instructor/profile', icon: UserCircle, label: 'Profile' },
+  { to: '/instructor', icon: LayoutDashboard, labelKey: 'nav.dashboard', end: true },
+  { to: '/instructor/courses', icon: BookOpen, labelKey: 'nav.myCourses' },
+  { to: '/instructor/assignments', icon: ClipboardList, labelKey: 'nav.assignments' },
+  { to: '/instructor/analytics', icon: BarChart3, labelKey: 'nav.analytics' },
+  { to: '/instructor/profile', icon: UserCircle, labelKey: 'nav.profile' },
 ];
 
 const studentLinks = [
-  { to: '/student', icon: LayoutDashboard, label: 'Dashboard', end: true },
-  { to: '/student/certificates', icon: Award, label: 'Certificates' },
-  { to: '/student/profile', icon: UserCircle, label: 'Profile' },
+  { to: '/student', icon: LayoutDashboard, labelKey: 'nav.dashboard', end: true },
+  { to: '/student/certificates', icon: Award, labelKey: 'nav.certificates' },
+  { to: '/student/profile', icon: UserCircle, labelKey: 'nav.profile' },
 ];
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -82,10 +84,10 @@ export default function Sidebar() {
               ${isActive ? 'bg-[#0D9488]/15 text-[#14B8A6]' : 'text-[#94A3B8] hover:bg-white/5 hover:text-[#E2E8F0]'}`
             }
             style={{ fontFamily: 'Space Mono' }}
-            data-testid={`nav-${link.label.toLowerCase().replace(/\s/g, '-')}`}
+            data-testid={`nav-${t(link.labelKey).toLowerCase().replace(/\s/g, '-')}`}
           >
             <link.icon size={17} className="shrink-0 transition-transform duration-200 group-hover:scale-110" />
-            {!collapsed && <span>{link.label}</span>}
+            {!collapsed && <span>{t(link.labelKey)}</span>}
           </NavLink>
         ))}
       </nav>
@@ -93,7 +95,7 @@ export default function Sidebar() {
       <div className="p-2 border-t border-white/10">
         <button onClick={logout} className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-[13px] font-medium text-[#94A3B8] hover:bg-red-500/10 hover:text-red-400 transition-all" style={{ fontFamily: 'Space Mono' }} data-testid="logout-btn">
           <LogOut size={17} />
-          {!collapsed && <span>Log Out</span>}
+          {!collapsed && <span>{t('nav.logOut')}</span>}
         </button>
       </div>
     </div>
