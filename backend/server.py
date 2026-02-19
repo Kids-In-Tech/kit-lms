@@ -295,6 +295,12 @@ async def create_user(request: Request):
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     db.users.insert_one(new_user)
+    # Notify admin about new user
+    role_label = new_user["role"].replace("_", " ").title()
+    send_notification(
+        f"New {role_label} Added", f"{new_user['name']} has been added as a {role_label}.",
+        ntype="user_created", target_role="super_admin", created_by=user["user_id"]
+    )
     result = {k: v for k, v in new_user.items() if k not in ["password_hash", "_id"]}
     result["default_password"] = default_pw
     return result
