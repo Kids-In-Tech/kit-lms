@@ -582,6 +582,8 @@ async def create_lesson(module_id: str, request: Request):
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     db.lessons.insert_one(lesson)
+    # Update course timestamp
+    db.courses.update_one({"course_id": mod["course_id"]}, {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}})
     # Recalculate progress for enrolled students & notify
     recalc_enrollment_progress(mod["course_id"])
     course = db.courses.find_one({"course_id": mod["course_id"]}, {"_id": 0})
