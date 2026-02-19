@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import API from '../../api';
+import { useLanguage } from '../../context/LanguageContext';
 import { Plus, Search, Edit2, Trash2, X, ShieldBan, ShieldCheck, Eye, ChevronDown } from 'lucide-react';
 import ConfirmModal from '../../components/ConfirmModal';
 import toast from 'react-hot-toast';
