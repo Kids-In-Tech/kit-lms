@@ -542,8 +542,11 @@ async def update_module(module_id: str, request: Request):
 async def delete_module(module_id: str, request: Request):
     user = get_user(request)
     require_role(user, ["super_admin", "instructor"])
+    mod = db.modules.find_one({"module_id": module_id}, {"_id": 0})
     db.modules.delete_one({"module_id": module_id})
     db.lessons.delete_many({"module_id": module_id})
+    if mod:
+        recalc_enrollment_progress(mod["course_id"])
     return {"message": "Module deleted"}
 
 @app.put("/api/courses/{course_id}/modules/reorder")
