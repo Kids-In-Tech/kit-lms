@@ -229,7 +229,7 @@ async def change_password(request: Request):
 async def update_profile(request: Request):
     user = get_user(request)
     body = await request.json()
-    allowed = ["name", "first_name", "middle_name", "last_name", "bio", "picture", "phone", "dob", "gender", "school_name", "class_name", "guardian_name"]
+    allowed = ["name", "first_name", "middle_name", "last_name", "bio", "picture", "phone", "dob", "gender", "school_name", "class_name", "guardian_name", "language"]
     update = {k: v for k, v in body.items() if k in allowed}
     if "first_name" in update or "last_name" in update:
         fn = update.get("first_name", user.get("first_name", ""))
